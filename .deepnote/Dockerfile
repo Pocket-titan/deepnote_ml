@@ -1,1 +1,0 @@
-FROM deepnote/python:3.7
