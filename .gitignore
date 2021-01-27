@@ -1,1 +1,4 @@
 .deepnote
+.venv
+poetry.lock
+pyproject.toml
