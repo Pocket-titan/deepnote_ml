@@ -1,6 +1,10 @@
 import pandas as pd
+import os
 
-data = pd.read_csv("~/work/data/Rumelhart_livingthings.csv", sep=",")
+dirpath = os.path.dirname(os.path.realpath(__file__))
+filepath = os.path.join(dirpath, "./Rumelhart_livingthings.csv")
+
+data = pd.read_csv(filepath, sep=",")
 
 columns = [
     "Grow",
