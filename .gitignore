@@ -5,4 +5,4 @@ poetry.lock
 pyproject.toml
 id_ed25519
 id_ed25519.pub
-__pycache__
+__pycache__/
