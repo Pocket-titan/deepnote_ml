@@ -2,74 +2,42 @@ import pandas as pd
 import os
 
 dirpath = os.path.dirname(os.path.realpath(__file__))
-filepath = os.path.join(dirpath, "./Rumelhart_livingthings.csv")
 
-data = pd.read_csv(filepath, sep=",")
 
-columns = [
-    "Grow",
-    "Living",
-    "LivingThing",
-    "Animal",
-    "Move",
-    "Skin",
-    "Bird",
-    "Feathers",
-    "Fly",
-    "Wings",
-    "Fish",
-    "Gills",
-    "Scales",
-    "Swim",
-    "Yellow",
-    "Red",
-    "Sing",
-    "Robin",
-    "Canary",
-    "Sunfish",
-    "Salmon",
-    "Daisy",
-    "Rose",
-    "Oak",
-    "Pine",
-    "Green",
-    "Bark",
-    "Big",
-    "Tree",
-    "Branches",
-    "Pretty",
-    "Petals",
-    "Flower",
-    "Leaves",
-    "Roots",
-    "Plant",
-]
-index = ["Robin", "Canary", "Sunfish",
-         "Salmon", "Daisy", "Rose", "Oak", "Pine"]
+def make_df(path: str) -> pd.DataFrame:
+    filepath = os.path.join(dirpath, path)
+    data = pd.read_csv(filepath, sep=",")
+    df = pd.pivot_table(
+        data,  index=["Item"], columns=["Attribute"], values="TRUE", fill_value=0
+    ).astype(float)
+    return df
 
+
+# Simple dataset
+simple_df = make_df("./Rumelhart_livingthings.csv")
+
+simple_columns = ["Grow", "Living", "LivingThing", "Animal", "Move", "Skin", "Bird", "Feathers", "Fly", "Wings", "Fish", "Gills", "Scales", "Swim", "Yellow", "Red", "Sing", "Robin",
+                  "Canary", "Sunfish", "Salmon", "Daisy", "Rose", "Oak", "Pine", "Green", "Bark", "Big", "Tree", "Branches", "Pretty", "Petals", "Flower", "Leaves", "Roots", "Plant", ]
+simple_index = ["Robin", "Canary", "Sunfish",
+                "Salmon", "Daisy", "Rose", "Oak", "Pine"]
 # Drop some columns & indices to simplify our dataset
-df = (
-    pd.pivot_table(
-        data, values="TRUE", index=["Item"], columns=["Attribute"], fill_value=0
-    )
-    .astype(float)
-    .reindex(index, axis="index",)
-    .reindex(columns, axis="columns",)
+simple_df = (
+    simple_df
+    .reindex(simple_index, axis="index",)
+    .reindex(simple_columns, axis="columns",)
 )
-
 # In the 2020 paper, roses have no leaves; only petals (relevant for orthogonality)
-df["Leaves"]["Rose"] = 0.0
-# print(df["Grow"])
+simple_df["Leaves"]["Rose"] = 0.0
 
 # Let's use a subset of the Rumelhart set for simplicity
-df_limited = (
-    df.drop(index=["Daisy", "Pine", "Robin", "Sunfish"])
+simple_df = (
+    simple_df.drop(index=["Daisy", "Pine", "Robin", "Sunfish"])
     .drop(
         columns=list(
             filter(
                 lambda x: x
                 not in ["Grow", "Move", "Roots", "Fly", "Swim", "Leaves", "Petals"],
-                columns,
+                simple_columns,
             )
         )
     )
@@ -77,8 +45,5 @@ df_limited = (
     .reindex(["Grow", "Move", "Roots", "Fly", "Swim", "Leaves", "Petals"], axis="columns")
 )
 
-# df_to_use = df
-df_to_use = df_limited
-
-items = sorted(df_to_use.index.unique())
-attributes = sorted(df_to_use.columns.unique())
+# Extended dataset
+extended_df = make_df("./Rumelhart_extended_livingthings.csv")

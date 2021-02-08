@@ -1,2 +1,7 @@
-from .data import items, attributes, df_to_use as df
-from .dataloader import dataloader
+from .data import simple_df, extended_df
+from .dataloader import make_dataloader
+
+df = simple_df
+# df = extended_df
+
+dataloader = make_dataloader(df)
