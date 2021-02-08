@@ -12,3 +12,7 @@ class Linear(torch.nn.Module):
         h_relu = self.F(self.linear1(x))
         y_pred = self.F(self.linear2(h_relu))
         return y_pred
+
+    def reset_parameters(self):
+        self.linear1.reset_parameters()
+        self.linear2.reset_parameters()
