@@ -48,13 +48,13 @@ def train_model(
     test_interval: int = 1,
 ):
     reset_model(model)
-    losses = []
+    train_loss = []
     pred_df = pd.DataFrame()
     rep_df = pd.DataFrame()
 
     for epoch in range(epochs + 1):
         loss = train_epoch(model, optimizer, dataloader, loss_fn)
-        losses.append(loss)
+        train_loss.append(loss)
 
         if epoch % test_interval == 0:
             predictions, accuracies, losses = test_model(
@@ -64,4 +64,4 @@ def train_model(
             # pred_df = pd.concat([pred_df, current_pred_df])
             # rep_df = pd.concat([rep_df, current_rep_df])
 
-    return losses, (pred_df, rep_df)
+    return train_loss, (pred_df, rep_df)
