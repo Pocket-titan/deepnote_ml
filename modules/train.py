@@ -53,16 +53,15 @@ def train_model(
     rep_df = pd.DataFrame()
 
     for epoch in range(epochs + 1):
-        # Train after eval or before? probably after?
         loss = train_epoch(model, optimizer, dataloader, loss_fn)
         losses.append(loss)
 
         if epoch % test_interval == 0:
-            current_pred_df, current_rep_df = test_model(
+            predictions, accuracies, losses = test_model(
                 model, dataloader, loss_fn)
-            current_pred_df['epoch'] = [epoch] * len(current_pred_df)
-            current_rep_df['epoch'] = [epoch] * len(current_rep_df)
-            pred_df = pd.concat([pred_df, current_pred_df])
-            rep_df = pd.concat([rep_df, current_rep_df])
+            # current_pred_df['epoch'] = [epoch] * len(current_pred_df)
+            # current_rep_df['epoch'] = [epoch] * len(current_rep_df)
+            # pred_df = pd.concat([pred_df, current_pred_df])
+            # rep_df = pd.concat([rep_df, current_rep_df])
 
     return losses, (pred_df, rep_df)

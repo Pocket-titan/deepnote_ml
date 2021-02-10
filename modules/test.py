@@ -6,8 +6,8 @@ import torch
 def test_model(
     model: torch.nn.Module,
     dataloader: torch.utils.data.DataLoader,
-    loss_fn,
-) -> (pd.DataFrame):
+    loss_fn: torch.nn.MSELoss,
+) -> Tuple[List, List, List]:
     model.eval()
     predictions, accuracies, losses = [], [], []
 
