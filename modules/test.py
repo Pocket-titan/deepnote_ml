@@ -1,5 +1,6 @@
 from typing import Tuple, List
 import pandas as pd
+import numpy as np
 import torch
 
 
@@ -7,7 +8,7 @@ def test_model(
     model: torch.nn.Module,
     dataloader: torch.utils.data.DataLoader,
     loss_fn: torch.nn.MSELoss,
-) -> Tuple[List, List, List]:
+) -> pd.DataFrame:
     model.eval()
     predictions, accuracies, losses = [], [], []
 
@@ -21,4 +22,12 @@ def test_model(
             losses.append(loss.detach().item())
             accuracies.append(accuracy.detach().item())
 
-    return (predictions, accuracies, losses)
+    df = pd.DataFrame(
+        data=predictions,
+        index=dataloader.dataset.df.index,
+        columns=dataloader.dataset.df.columns,
+    )
+    df["accuracy"] = accuracies
+    df["loss"] = losses
+
+    return df

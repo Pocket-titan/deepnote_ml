@@ -46,22 +46,18 @@ def train_model(
     loss_fn: torch.nn.MSELoss,
     epochs: int = 2500,
     test_interval: int = 1,
-):
+) -> Tuple[List[float], pd.DataFrame]:
     reset_model(model)
     train_loss = []
-    pred_df = pd.DataFrame()
-    rep_df = pd.DataFrame()
+    df = pd.DataFrame()
 
     for epoch in range(epochs + 1):
         loss = train_epoch(model, optimizer, dataloader, loss_fn)
         train_loss.append(loss)
 
         if epoch % test_interval == 0:
-            predictions, accuracies, losses = test_model(
-                model, dataloader, loss_fn)
-            # current_pred_df['epoch'] = [epoch] * len(current_pred_df)
-            # current_rep_df['epoch'] = [epoch] * len(current_rep_df)
-            # pred_df = pd.concat([pred_df, current_pred_df])
-            # rep_df = pd.concat([rep_df, current_rep_df])
+            test_df = test_model(model, dataloader, loss_fn)
+            test_df["epoch"] = [epoch] * len(test_df)
+            df = pd.concat([df, test_df])
 
-    return train_loss, (pred_df, rep_df)
+    return train_loss, df

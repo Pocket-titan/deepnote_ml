@@ -2,7 +2,7 @@ import torch
 
 
 class HopfieldLayer(torch.nn.Module):
-    def __init__(self, hidden_dim: int, recurrent_generations: int, F=torch.relu):
+    def __init__(self, hidden_dim: int, recurrent_generations: int, F=torch.sigmoid):
         super().__init__()
         self.F = F
         self.recurrent_generations = recurrent_generations
@@ -30,7 +30,14 @@ class HopfieldLayer(torch.nn.Module):
 
 
 class Hopfield(torch.nn.Module):
-    def __init__(self, in_dim: int, hidden_dim: int, out_dim: int, recurrent_generations: int, F=torch.sigmoid) -> None:
+    def __init__(
+        self,
+        in_dim: int,
+        hidden_dim: int,
+        out_dim: int,
+        recurrent_generations: int,
+        F=torch.sigmoid,
+    ) -> None:
         super().__init__()
         self.F = F
         self.linear1 = torch.nn.Linear(in_dim, hidden_dim)
